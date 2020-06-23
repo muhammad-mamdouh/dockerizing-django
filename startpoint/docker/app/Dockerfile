@@ -10,5 +10,7 @@ COPY ./app /app
 # Install the requirements
 RUN pip install -r requirements.txt
 
-# Run the Django app server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Copy and run the entrypoint script
+COPY ./docker/app/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
