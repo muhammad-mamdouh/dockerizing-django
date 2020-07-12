@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 
 services:
 
@@ -22,8 +22,12 @@ services:
     image: postgres:9.4
     volumes:
       - db-data:/var/lib/postgresql/data
+    secrets:
+      - psql_user
+      - psql_password
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      POSTGRES_USER_FILE: /run/secrets/psql_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/psql_password
     networks:
       - backend
     deploy:
@@ -95,6 +99,12 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
+
+secrets:
+  psql_user:
+    file: ./psql_user.txt
+  psql_password:
+    file: ./psql_password.txt
 
 networks:
   frontend:
